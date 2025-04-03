@@ -6,17 +6,20 @@ import Features from '@/components/Features';
 import ReportWaste from '@/components/ReportWaste';
 import Leaderboard from '@/components/Leaderboard';
 import Footer from '@/components/Footer';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
-      <Navbar />
-      <Hero />
-      <Features />
-      <ReportWaste />
-      <Leaderboard />
-      <Footer />
-    </div>
+    <AuthProvider>
+      <div className="min-h-screen">
+        <Navbar />
+        <Hero />
+        <Features />
+        <ReportWaste />
+        <Leaderboard />
+        <Footer />
+      </div>
+    </AuthProvider>
   );
 };
 

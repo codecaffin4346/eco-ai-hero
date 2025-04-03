@@ -94,6 +94,24 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #2ECC71;
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #1E8449;
+  }
 }
 
 @layer components {
@@ -117,5 +135,15 @@
     50% {
       background-position: 100% 50%;
     }
+  }
+  
+  /* Button hover effects */
+  .hover-scale {
+    @apply transition-transform duration-200 hover:scale-105;
+  }
+  
+  /* Input focus effect */
+  .input-focus-effect {
+    @apply transition-all focus:ring-2 focus:ring-eco-green focus:border-transparent;
   }
 }

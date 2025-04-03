@@ -25,7 +25,7 @@ const Features = () => {
     <section id="features" className="py-20 bg-white">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <div className="inline-block eco-badge mb-4">Why Zero2Hero?</div>
+          <div className="inline-block eco-badge mb-4">Why EcoVista?</div>
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Turning Waste Management into a <span className="bg-eco-gradient text-transparent bg-clip-text">Rewarding Experience</span>
           </h2>
@@ -36,7 +36,7 @@ const Features = () => {
         
         <div className="grid md:grid-cols-3 gap-8">
           {features.map((feature, idx) => (
-            <div key={idx} className="eco-card hover:border-eco-green transition-all">
+            <div key={idx} className="eco-card hover:border-eco-green transition-all hover:shadow-lg transform hover:-translate-y-1">
               <div className="h-14 w-14 rounded-full bg-gray-50 flex items-center justify-center mb-6">
                 {feature.icon}
               </div>
@@ -90,19 +90,25 @@ const Features = () => {
             
             <div className="relative">
               <div className="absolute -z-10 inset-0 bg-eco-gradient opacity-5 rounded-2xl transform rotate-3"></div>
-              <div className="bg-white rounded-xl border overflow-hidden shadow-md">
+              <div className="bg-white rounded-xl border overflow-hidden shadow-md group hover:shadow-xl transition-all">
                 <div className="bg-eco-gradient text-white p-3 flex items-center gap-2">
                   <Brain className="h-5 w-5" />
                   <span className="font-medium">AI-Powered Verification</span>
                 </div>
                 <div className="p-6 space-y-4">
                   <div className="border rounded-lg p-4 flex gap-4">
-                    <CameraIcon className="h-8 w-8 text-eco-green shrink-0" />
-                    <div>
+                    <div className="h-24 w-24 rounded-lg bg-gray-100 overflow-hidden">
+                      <img 
+                        src="https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=300" 
+                        alt="Waste sample" 
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1">
                       <h5 className="font-medium">Image Analysis</h5>
                       <p className="text-sm text-gray-600">AI analyzing waste image...</p>
-                      <div className="mt-2 h-2 bg-gray-100 rounded-full">
-                        <div className="h-full bg-eco-gradient rounded-full w-[80%]"></div>
+                      <div className="mt-2 h-2 bg-gray-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-eco-gradient rounded-full w-[80%] group-hover:animate-pulse-gentle"></div>
                       </div>
                     </div>
                   </div>

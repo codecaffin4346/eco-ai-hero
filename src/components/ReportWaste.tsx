@@ -1,11 +1,75 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Camera, Upload, Check } from 'lucide-react';
+import { Camera, Upload, Check, Loader2, Info, X } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from "@/components/ui/use-toast";
+import LoginModal from './LoginModal';
 
 const ReportWaste = () => {
-  const [step, setStep] = React.useState(1);
+  const [step, setStep] = useState(1);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const { isAuthenticated } = useAuth();
+  
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setIsUploading(true);
+      
+      // Simulate upload delay
+      setTimeout(() => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          setUploadedImage(event.target?.result as string);
+          setIsUploading(false);
+        };
+        reader.readAsDataURL(file);
+      }, 1500);
+    }
+  };
+  
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+  
+  const handleContinue = () => {
+    if (!isAuthenticated) {
+      setIsLoginModalOpen(true);
+      return;
+    }
+    
+    if (step === 1) {
+      if (!uploadedImage) {
+        toast({
+          title: "No image selected",
+          description: "Please upload an image to continue",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      setStep(2);
+      setIsVerifying(true);
+      
+      // Simulate AI verification delay
+      setTimeout(() => {
+        setIsVerifying(false);
+      }, 3000);
+    } else if (step === 2) {
+      setStep(3);
+    }
+  };
+  
+  const handleReset = () => {
+    setStep(1);
+    setUploadedImage(null);
+  };
+
   return (
     <section id="report" className="py-20 bg-gradient-to-b from-blue-50 to-white">
       <div className="container mx-auto px-4">
@@ -48,22 +112,83 @@ const ReportWaste = () => {
             {step === 1 && (
               <div className="space-y-8 text-center">
                 <h3 className="text-xl font-medium">Upload Waste Image</h3>
-                <div className="border-2 border-dashed border-gray-200 rounded-lg p-10 bg-gray-50">
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="h-16 w-16 rounded-full bg-gray-100 flex items-center justify-center">
-                      <Upload className="h-8 w-8 text-gray-500" />
+                <div 
+                  className={`border-2 ${
+                    uploadedImage ? 'border-eco-green' : 'border-dashed border-gray-200'
+                  } rounded-lg p-6 bg-gray-50 relative transition-all`}
+                >
+                  {uploadedImage ? (
+                    <div className="relative">
+                      <img 
+                        src={uploadedImage} 
+                        alt="Uploaded waste" 
+                        className="max-h-64 mx-auto rounded-lg"
+                      />
+                      <button 
+                        className="absolute top-2 right-2 bg-white rounded-full p-1 shadow hover:bg-red-50"
+                        onClick={() => setUploadedImage(null)}
+                      >
+                        <X className="h-4 w-4 text-red-500" />
+                      </button>
                     </div>
-                    <div>
-                      <p className="font-medium">Drag & drop your image here</p>
-                      <p className="text-sm text-gray-500">or click to browse files</p>
+                  ) : isUploading ? (
+                    <div className="flex flex-col items-center gap-4 py-10">
+                      <Loader2 className="h-10 w-10 text-eco-green animate-spin" />
+                      <p className="font-medium text-gray-700">Uploading image...</p>
                     </div>
-                    <Button className="mt-4 bg-eco-gradient">
-                      <Camera className="h-4 w-4 mr-2" /> Take a Photo
-                    </Button>
-                  </div>
+                  ) : (
+                    <div className="flex flex-col items-center gap-4 py-10">
+                      <div 
+                        className="h-16 w-16 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-gray-200 transition-colors"
+                        onClick={handleUploadClick}
+                      >
+                        <Upload className="h-8 w-8 text-gray-500" />
+                      </div>
+                      <div>
+                        <p className="font-medium">Drag & drop your image here</p>
+                        <p className="text-sm text-gray-500">or click to browse files</p>
+                      </div>
+                      <input 
+                        type="file" 
+                        className="hidden" 
+                        ref={fileInputRef}
+                        accept="image/*" 
+                        onChange={handleFileChange}
+                      />
+                      <div className="flex gap-4 mt-4">
+                        <Button 
+                          className="bg-eco-gradient"
+                          onClick={handleUploadClick}
+                          disabled={isUploading}
+                        >
+                          <Upload className="h-4 w-4 mr-2" /> Upload Image
+                        </Button>
+                        <Button 
+                          variant="outline"
+                          onClick={() => {
+                            // In a real app, this would trigger camera capture
+                            toast({
+                              title: "Camera Access",
+                              description: "Opening camera to take a photo...",
+                            });
+                          }}
+                          disabled={isUploading}
+                        >
+                          <Camera className="h-4 w-4 mr-2" /> Take a Photo
+                        </Button>
+                      </div>
+                    </div>
+                  )}
                 </div>
+                
                 <div className="flex justify-end">
-                  <Button className="bg-eco-gradient" onClick={() => setStep(2)}>Continue</Button>
+                  <Button 
+                    className={`bg-eco-gradient ${!uploadedImage ? 'opacity-70' : 'hover:opacity-90'}`} 
+                    onClick={handleContinue}
+                    disabled={isUploading || !uploadedImage}
+                  >
+                    Continue
+                  </Button>
                 </div>
               </div>
             )}
@@ -72,26 +197,65 @@ const ReportWaste = () => {
               <div className="space-y-8 text-center">
                 <h3 className="text-xl font-medium">AI Verification</h3>
                 <div className="border rounded-lg p-6 bg-white relative">
-                  <div className="max-w-xs h-64 mx-auto bg-gray-100 rounded-lg mb-6">
-                    {/* Placeholder for upload image */}
-                    <div className="h-full flex items-center justify-center">
-                      <p className="text-gray-400">Uploaded image preview</p>
-                    </div>
+                  <div className="max-w-xs h-64 mx-auto bg-gray-100 rounded-lg mb-6 overflow-hidden">
+                    {uploadedImage && (
+                      <img 
+                        src={uploadedImage} 
+                        alt="Uploaded waste" 
+                        className="h-full w-full object-contain"
+                      />
+                    )}
                   </div>
                   
-                  <div className="absolute inset-0 flex items-center justify-center bg-white/80">
-                    <div className="text-center">
-                      <div className="relative h-16 w-16 mx-auto mb-4">
-                        <div className="absolute inset-0 rounded-full border-4 border-eco-green/30 border-t-eco-green animate-spin"></div>
+                  {isVerifying && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-white/80">
+                      <div className="text-center">
+                        <div className="relative h-16 w-16 mx-auto mb-4">
+                          <div className="absolute inset-0 rounded-full border-4 border-eco-green/30 border-t-eco-green animate-spin"></div>
+                        </div>
+                        <p className="font-medium text-eco-dark-green">AI is analyzing your waste image...</p>
+                        <p className="text-sm text-gray-500 mt-1">This usually takes about 15 seconds</p>
                       </div>
-                      <p className="font-medium text-eco-dark-green">AI is analyzing your waste image...</p>
-                      <p className="text-sm text-gray-500 mt-1">This usually takes about 15 seconds</p>
                     </div>
-                  </div>
+                  )}
+                  
+                  {!isVerifying && (
+                    <div className="space-y-4">
+                      <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-100 text-green-800 rounded-full">
+                        <Check className="h-4 w-4" /> 
+                        Verification Successful
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-4 text-left">
+                        <div className="p-3 bg-gray-50 rounded-lg">
+                          <p className="text-xs text-gray-500">Waste Type</p>
+                          <p className="font-medium">Mixed Recyclables</p>
+                        </div>
+                        <div className="p-3 bg-gray-50 rounded-lg">
+                          <p className="text-xs text-gray-500">Estimated Weight</p>
+                          <p className="font-medium">1.2 kg</p>
+                        </div>
+                        <div className="p-3 bg-gray-50 rounded-lg">
+                          <p className="text-xs text-gray-500">Reward Points</p>
+                          <p className="font-medium text-eco-blue">+35 points</p>
+                        </div>
+                        <div className="p-3 bg-gray-50 rounded-lg">
+                          <p className="text-xs text-gray-500">CO₂ Saved</p>
+                          <p className="font-medium text-eco-green">2.4 kg</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="flex justify-between">
                   <Button variant="outline" onClick={() => setStep(1)}>Back</Button>
-                  <Button className="bg-eco-gradient" onClick={() => setStep(3)}>Skip Verification (Demo)</Button>
+                  <Button 
+                    className="bg-eco-gradient" 
+                    onClick={handleContinue}
+                    disabled={isVerifying}
+                  >
+                    {isVerifying ? 'Verifying...' : 'Confirm & Continue'}
+                  </Button>
                 </div>
               </div>
             )}
@@ -131,14 +295,23 @@ const ReportWaste = () => {
                   </div>
                 </div>
                 <div className="flex justify-between">
-                  <Button variant="outline" onClick={() => setStep(1)}>New Report</Button>
-                  <Button className="bg-eco-gradient">View Your Impact</Button>
+                  <Button variant="outline" onClick={handleReset}>New Report</Button>
+                  <Button 
+                    className="bg-eco-gradient"
+                    onClick={() => {
+                      document.getElementById('leaderboard')?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                  >
+                    View Your Impact
+                  </Button>
                 </div>
               </div>
             )}
           </div>
         </div>
       </div>
+      
+      <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
     </section>
   );
 };

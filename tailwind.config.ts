@@ -63,14 +63,14 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Custom colors for Zero2Hero
+				// Custom colors for EcoVista
 				eco: {
-					green: '#34D399',
-					'light-green': '#6EE7B7',
-					'dark-green': '#059669',
-					blue: '#38BDF8',
-					'light-blue': '#7DD3FC',
-					'dark-blue': '#0369A1',
+					green: '#2ECC71',
+					'light-green': '#7DCEA0',
+					'dark-green': '#1E8449',
+					blue: '#3498DB',
+					'light-blue': '#85C1E9',
+					'dark-blue': '#1A5276',
 				}
 			},
 			borderRadius: {
@@ -104,15 +104,26 @@ export default {
 						opacity: '1',
 						transform: 'translateY(0)'
 					}
+				},
+				'pulse-gentle': {
+					'0%, 100%': { 
+						transform: 'scale(1)' 
+					},
+					'50%': { 
+						transform: 'scale(1.05)' 
+					},
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'fade-in': 'fade-in 0.5s ease-out'
+				'fade-in': 'fade-in 0.5s ease-out',
+				'pulse-gentle': 'pulse-gentle 3s ease-in-out infinite'
 			},
 			backgroundImage: {
-				'eco-gradient': 'linear-gradient(135deg, #34D399 0%, #38BDF8 100%)',
+				'eco-gradient': 'linear-gradient(135deg, #2ECC71 0%, #3498DB 100%)',
+				'eco-gradient-subtle': 'linear-gradient(135deg, rgba(46, 204, 113, 0.15) 0%, rgba(52, 152, 219, 0.15) 100%)',
+				'nature-pattern': 'url("https://images.unsplash.com/photo-1501854140801-50d01698950b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080")'
 			}
 		}
 	},
