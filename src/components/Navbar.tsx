@@ -39,6 +39,7 @@ const Navbar = () => {
     { name: 'Home', path: '/' },
     { name: 'Carbon Credits', path: '/carbon-credits' },
     { name: 'Report Waste', path: isHomePage ? '#report' : '/#report' },
+    { name: 'Upcycling Hub', path: isHomePage ? '#upcycling' : '/#upcycling' },
     { name: 'Leaderboard', path: isHomePage ? '#leaderboard' : '/#leaderboard' },
   ];
   
