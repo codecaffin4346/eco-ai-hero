@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Trophy, ChevronDown, ArrowRight, Sparkles } from 'lucide-react';
+import { Trophy, ChevronDown, ArrowRight, Sparkles, Coins } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 const Leaderboard = () => {
@@ -9,11 +9,11 @@ const Leaderboard = () => {
   const [animateRank, setAnimateRank] = useState(false);
   
   const topUsers = [
-    { rank: 1, name: "EcoWarrior", points: 1875, streak: 28, avatar: "bg-eco-green" },
-    { rank: 2, name: "GreenHero", points: 1654, streak: 14, avatar: "bg-eco-blue" },
-    { rank: 3, name: "EarthSaver", points: 1432, streak: 21, avatar: "bg-eco-dark-green" },
-    { rank: 4, name: "RecyclePro", points: 1287, streak: 7, avatar: "bg-eco-light-green" },
-    { rank: 5, name: "CleanUpChamp", points: 1156, streak: 12, avatar: "bg-eco-light-blue" },
+    { rank: 1, name: "EcoWarrior", points: 1875, streak: 28, credits: 425, avatar: "bg-eco-green" },
+    { rank: 2, name: "GreenHero", points: 1654, streak: 14, credits: 380, avatar: "bg-eco-blue" },
+    { rank: 3, name: "EarthSaver", points: 1432, streak: 21, credits: 310, avatar: "bg-eco-dark-green" },
+    { rank: 4, name: "RecyclePro", points: 1287, streak: 7, credits: 290, avatar: "bg-eco-light-green" },
+    { rank: 5, name: "CleanUpChamp", points: 1156, streak: 12, credits: 265, avatar: "bg-eco-light-blue" },
   ];
   
   const currentUser = {
@@ -21,6 +21,7 @@ const Leaderboard = () => {
     name: isAuthenticated ? user?.name?.split(' ')[0] || "You" : "You",
     points: 378,
     streak: 5,
+    credits: 135,
     avatar: "bg-gradient-to-r from-eco-green to-eco-blue"
   };
   
@@ -69,8 +70,9 @@ const Leaderboard = () => {
               <div className="space-y-6">
                 <div className="grid grid-cols-12 text-sm font-medium text-gray-500 px-4">
                   <div className="col-span-1">#</div>
-                  <div className="col-span-5">User</div>
-                  <div className="col-span-3 text-right">Impact Points</div>
+                  <div className="col-span-4">User</div>
+                  <div className="col-span-2 text-right">Impact Points</div>
+                  <div className="col-span-2 text-right">Carbon Credits</div>
                   <div className="col-span-3 text-right">Streak</div>
                 </div>
                 
@@ -84,7 +86,7 @@ const Leaderboard = () => {
                       style={{ animationDelay: `${index * 100}ms` }}
                     >
                       <div className="col-span-1 font-bold text-gray-700">{user.rank}</div>
-                      <div className="col-span-5 flex items-center gap-3">
+                      <div className="col-span-4 flex items-center gap-3">
                         <div className={`h-10 w-10 rounded-full ${user.avatar} flex items-center justify-center text-white font-medium`}>
                           {user.name.charAt(0)}
                         </div>
@@ -93,8 +95,11 @@ const Leaderboard = () => {
                           <Sparkles className="h-4 w-4 text-yellow-500" />
                         )}
                       </div>
-                      <div className="col-span-3 text-right font-bold text-eco-dark-green">
+                      <div className="col-span-2 text-right font-bold text-eco-dark-green">
                         {user.points.toLocaleString()}
+                      </div>
+                      <div className="col-span-2 text-right flex items-center justify-end font-bold text-eco-blue">
+                        {user.credits.toLocaleString()} <Coins className="h-3 w-3 ml-1" />
                       </div>
                       <div className="col-span-3 text-right">
                         <div className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
@@ -121,7 +126,7 @@ const Leaderboard = () => {
                     }`}
                   >
                     <div className="col-span-1 font-bold text-gray-700">{currentUser.rank}</div>
-                    <div className="col-span-5 flex items-center gap-3">
+                    <div className="col-span-4 flex items-center gap-3">
                       <div className={`h-10 w-10 rounded-full ${currentUser.avatar} flex items-center justify-center text-white font-medium`}>
                         {currentUser.name.charAt(0)}
                       </div>
@@ -130,8 +135,11 @@ const Leaderboard = () => {
                         {isAuthenticated && user?.name && " (You)"}
                       </span>
                     </div>
-                    <div className="col-span-3 text-right font-bold text-eco-dark-green">
+                    <div className="col-span-2 text-right font-bold text-eco-dark-green">
                       {currentUser.points.toLocaleString()}
+                    </div>
+                    <div className="col-span-2 text-right flex items-center justify-end font-bold text-eco-blue">
+                      {currentUser.credits.toLocaleString()} <Coins className="h-3 w-3 ml-1" />
                     </div>
                     <div className="col-span-3 text-right">
                       <div className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
@@ -151,15 +159,26 @@ const Leaderboard = () => {
                       <p className="text-sm text-gray-500">to reach rank #41</p>
                     </div>
                   </div>
-                  <Button 
-                    className="bg-eco-gradient group hover:opacity-90"
-                    onClick={() => {
-                      document.getElementById('report')?.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                  >
-                    Report More Waste 
-                    <ArrowRight className="h-4 w-4 ml-1 group-hover:translate-x-0.5 transition-transform" />
-                  </Button>
+                  <div className="flex gap-3">
+                    <Button 
+                      variant="outline"
+                      className="border-eco-blue text-eco-blue hover:bg-eco-blue/10"
+                      onClick={() => {
+                        window.location.href = '/carbon-credits';
+                      }}
+                    >
+                      Manage Credits <Coins className="h-4 w-4 ml-1" />
+                    </Button>
+                    <Button 
+                      className="bg-eco-gradient group hover:opacity-90"
+                      onClick={() => {
+                        document.getElementById('report')?.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                    >
+                      Report More Waste 
+                      <ArrowRight className="h-4 w-4 ml-1 group-hover:translate-x-0.5 transition-transform" />
+                    </Button>
+                  </div>
                 </div>
                 <div className="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
                   <div className="h-full bg-eco-gradient rounded-full w-[35%]"></div>

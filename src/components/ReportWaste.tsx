@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Camera, Upload, Check, Loader2, Info, X } from 'lucide-react';
+import { Camera, Upload, Check, Loader2, X, Coins } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from "@/components/ui/use-toast";
 import LoginModal from './LoginModal';
@@ -80,7 +80,7 @@ const ReportWaste = () => {
           </h2>
           <p className="text-gray-600">
             Take a photo of waste you've collected or found, and our AI will verify it. 
-            Earn rewards for your positive environmental impact!
+            Earn rewards and carbon credits for your positive environmental impact!
           </p>
         </div>
         
@@ -240,8 +240,10 @@ const ReportWaste = () => {
                           <p className="font-medium text-eco-blue">+35 points</p>
                         </div>
                         <div className="p-3 bg-gray-50 rounded-lg">
-                          <p className="text-xs text-gray-500">CO₂ Saved</p>
-                          <p className="font-medium text-eco-green">2.4 kg</p>
+                          <p className="text-xs text-gray-500">Carbon Credits</p>
+                          <p className="font-medium text-eco-green flex items-center">
+                            +35 <Coins className="h-3 w-3 ml-1" />
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -288,9 +290,48 @@ const ReportWaste = () => {
                         <span className="font-medium text-eco-blue">+35 points</span>
                       </div>
                       <div className="flex justify-between">
+                        <span className="text-gray-600">Carbon Credits:</span>
+                        <span className="font-medium text-eco-green flex items-center">
+                          +35 <Coins className="h-3 w-3 ml-1" />
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
                         <span className="text-gray-600">CO₂ Saved:</span>
                         <span className="font-medium text-eco-green">2.4 kg</span>
                       </div>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
+                      <h5 className="font-medium text-eco-blue mb-1">Carbon Credits Earned</h5>
+                      <p className="text-sm text-gray-600">
+                        You've earned 35 carbon credits that you can trade or use for offset projects.
+                      </p>
+                      <Button 
+                        variant="outline" 
+                        className="mt-3 border-eco-blue text-eco-blue hover:bg-eco-blue/10 w-full"
+                        onClick={() => {
+                          window.location.href = '/carbon-credits';
+                        }}
+                      >
+                        View Your Credits
+                      </Button>
+                    </div>
+                    <div className="p-4 bg-green-50 rounded-lg border border-green-100">
+                      <h5 className="font-medium text-eco-green mb-1">Leaderboard Impact</h5>
+                      <p className="text-sm text-gray-600">
+                        Your points have been added to the leaderboard. Keep up the good work!
+                      </p>
+                      <Button 
+                        variant="outline" 
+                        className="mt-3 border-eco-green text-eco-green hover:bg-eco-green/10 w-full"
+                        onClick={() => {
+                          document.getElementById('leaderboard')?.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                      >
+                        View Leaderboard
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -299,10 +340,10 @@ const ReportWaste = () => {
                   <Button 
                     className="bg-eco-gradient"
                     onClick={() => {
-                      document.getElementById('leaderboard')?.scrollIntoView({ behavior: 'smooth' });
+                      window.location.href = '/carbon-credits';
                     }}
                   >
-                    View Your Impact
+                    Manage Carbon Credits
                   </Button>
                 </div>
               </div>
