@@ -5,6 +5,7 @@ import { Camera, Upload, Check, Loader2, X, Coins } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from "@/components/ui/use-toast";
 import LoginModal from './LoginModal';
+import { Card, CardContent } from "@/components/ui/card";
 
 const ReportWaste = () => {
   const [step, setStep] = useState(1);
@@ -75,17 +76,17 @@ const ReportWaste = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <div className="inline-block eco-badge mb-4">Report Waste</div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          <h2 className="text-3xl md:text-5xl font-bold mb-6">
             Make An <span className="bg-eco-gradient text-transparent bg-clip-text">Impact Today</span>
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 text-lg">
             Take a photo of waste you've collected or found, and our AI will verify it. 
             Earn rewards and carbon credits for your positive environmental impact!
           </p>
         </div>
         
-        <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg border overflow-hidden">
-          <div className="p-8">
+        <Card className="max-w-2xl mx-auto border-0 shadow-lg overflow-hidden bg-white">
+          <CardContent className="p-8">
             {/* Progress Steps */}
             <div className="flex justify-between mb-12 relative">
               <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-200 -translate-y-1/2 z-0"></div>
@@ -157,7 +158,7 @@ const ReportWaste = () => {
                       />
                       <div className="flex gap-4 mt-4">
                         <Button 
-                          className="bg-eco-gradient"
+                          className="bg-eco-gradient hover:shadow-md transition-all"
                           onClick={handleUploadClick}
                           disabled={isUploading}
                         >
@@ -183,7 +184,7 @@ const ReportWaste = () => {
                 
                 <div className="flex justify-end">
                   <Button 
-                    className={`bg-eco-gradient ${!uploadedImage ? 'opacity-70' : 'hover:opacity-90'}`} 
+                    className={`bg-eco-gradient hover:shadow-md transition-all ${!uploadedImage ? 'opacity-70' : 'hover:opacity-90'}`} 
                     onClick={handleContinue}
                     disabled={isUploading || !uploadedImage}
                   >
@@ -252,7 +253,7 @@ const ReportWaste = () => {
                 <div className="flex justify-between">
                   <Button variant="outline" onClick={() => setStep(1)}>Back</Button>
                   <Button 
-                    className="bg-eco-gradient" 
+                    className="bg-eco-gradient hover:shadow-md transition-all" 
                     onClick={handleContinue}
                     disabled={isVerifying}
                   >
@@ -338,7 +339,7 @@ const ReportWaste = () => {
                 <div className="flex justify-between">
                   <Button variant="outline" onClick={handleReset}>New Report</Button>
                   <Button 
-                    className="bg-eco-gradient"
+                    className="bg-eco-gradient hover:shadow-md transition-all"
                     onClick={() => {
                       window.location.href = '/carbon-credits';
                     }}
@@ -348,8 +349,8 @@ const ReportWaste = () => {
                 </div>
               </div>
             )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
       
       <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
